@@ -1,16 +1,10 @@
 import {Express, Request, Response} from 'express';
 import cors from 'cors';
-import {
-    createUserHandler,
-    getCurrentUserHandler,
-} from './controller/user.controller';
+import {createUserHandler, getCurrentUserHandler,} from './controller/user.controller';
 import validateResource from './middleware/validateResource';
 import {createUserSchema} from './schema/user.schema';
 import {createSessionSchema} from './schema/session.schema';
-import {
-    createSessionHandler,
-    refreshAccessTokenHandler,
-} from './controller/auth.controller';
+import {createSessionHandler, refreshAccessTokenHandler,} from './controller/auth.controller';
 import requireUser from './middleware/requireUser';
 
 
@@ -40,10 +34,8 @@ import {
     getPerformanceVisitorsHandler,
     getSummaryByDate,
     getVisitorByDateHandler,
-    getVisitorByDateNumberHandler,
     getVisitorHandler,
     getVisitorsHandler,
-    updateQuizResult,
     updateVisitorColorsHandler,
     updateVisitorHandler,
 } from './controller/performance/visitor.controller';
@@ -59,12 +51,7 @@ import {
     getPhasesHandler,
     updatePhaseHandler,
 } from './controller/performance/phase.controller';
-import {
-    createGameSchema,
-    deleteGameSchema,
-    getGameSchema,
-    updateGameSchema,
-} from './schema/performance/game.schema';
+import {createGameSchema, deleteGameSchema, getGameSchema, updateGameSchema,} from './schema/performance/game.schema';
 import {
     createGameHandler,
     deleteGameHandler,
@@ -80,7 +67,7 @@ function routes(app: Express) {
 
     app.get('/api/health-check', cors(), (req: Request, res: Response) => {
         // console.log('yo');
-        // console.log('im hot reload');
+        console.log('im hot reload');
         res.sendStatus(200);
     });
 

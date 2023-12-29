@@ -1,10 +1,11 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 import {
     CreateVisitorInput,
     DeleteVisitorInput,
     ReadVisitorInput,
     UpdateVisitorInput,
 } from '../../schema/performance/visitor.schema';
+
 import {
     confirmVisitorColors,
     createVisitor,
@@ -13,21 +14,14 @@ import {
     findVisitor,
     getAllVisitors,
 } from '../../service/performance/visitor.service';
-import { createUser } from '../../service/user.service';
-import { signVisitorAccessToken } from '../../service/auth.service';
-import { createBasket } from '../../service/humanity-shop/basket.service';
-import {
-    findAndUpdatePerformance,
-    findPerformance,
-} from '../../service/performance/performance.service';
+import {createUser} from '../../service/user.service';
+import {signVisitorAccessToken} from '../../service/auth.service';
+import {findAndUpdatePerformance, findPerformance,} from '../../service/performance/performance.service';
 import QuizResultModel from '../../models/performance/quiz-results.model';
 import VisitorModel from '../../models/performance/visitor.model';
 import PerformanceModel from '../../models/performance/performance.model';
-import { cloneDeep } from 'lodash';
-import ProductModel from '../../models/humanity-shop/product.model';
-import quizResultsModel from '../../models/performance/quiz-results.model';
-import PhaseModel from '../../models/performance/phase.model';
 import GameModel from '../../models/performance/game.model';
+
 
 export async function createVisitorHandler(
     req: Request<CreateVisitorInput>,
@@ -51,22 +45,15 @@ export async function createVisitorHandler(
 
         const body = req.body;
 
-        let visitor = await createVisitor({ ...body, user: userId });
-        const visitorBasket = await createBasket({
-            user: user,
-            visitor: visitor,
-            coins_left: 100,
-            products: [],
-            confirmed: false,
-        });
+        let visitor = await createVisitor({...body, user: userId});
+
         const performance = await findPerformance({
             performanceId: body.performance,
         });
 
         visitor = await findAndUpdateVisitor(
-            { _id: visitor._id },
+            {_id: visitor._id},
             {
-                basket: visitorBasket,
                 performance: performance,
             },
             {
@@ -74,19 +61,19 @@ export async function createVisitorHandler(
             }
         );
         await findAndUpdatePerformance(
-            { performanceId: body.performance },
-            { visitors: [...performance.visitors, visitor._id] },
+            {performanceId: body.performance},
+            {visitors: [...performance.visitors, visitor._id]},
             {
                 new: true,
             }
         );
-        // console.log('i created this visitor', visitor);
         visitor.accessToken = accessToken; // just in case
         return res.send(visitor);
     } catch (e) {
         console.error(e);
     }
 }
+
 export async function updateVisitorColorsHandler(req: Request, res: Response) {
     try {
         await confirmVisitorColors(req.body);
@@ -96,11 +83,10 @@ export async function updateVisitorColorsHandler(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 }
+
 export async function archiveVisitorsHandler(req: Request, res: Response) {
-    // console.log('trying to archive vistiors');
     try {
         await archiveVisitors(req.body);
-        // console.log(req.body);
         return res.sendStatus(204);
     } catch (e) {
         console.error(e);
@@ -112,8 +98,8 @@ export async function archiveVisitors(update: any) {
     try {
         // console.log('update:', update);
         await VisitorModel.updateMany(
-            { performance: update._id },
-            { archived: true }
+            {performance: update._id},
+            {archived: true}
         );
     } catch (e) {
         console.error(e);
@@ -142,7 +128,7 @@ export async function updateVisitorHandler(
         const visitorId = req.params.visitorId;
         const update = req.body;
 
-        const visitor = await findVisitor({ visitorId });
+        const visitor = await findVisitor({visitorId});
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -171,7 +157,7 @@ export async function updateVisitorHandler(
                     addQuizResults.push(result);
                 } else {
                     const result = await QuizResultModel.findByIdAndUpdate(
-                        { _id: qr._id },
+                        {_id: qr._id},
                         qr
                     );
                     addQuizResults.push(result);
@@ -180,7 +166,7 @@ export async function updateVisitorHandler(
             }
         }
         const updatedVisitor = await findAndUpdateVisitor(
-            { visitorId },
+            {visitorId},
             {
                 ...update,
                 quiz_results: addQuizResults,
@@ -203,7 +189,7 @@ export async function getVisitorHandler(
 ) {
     try {
         const visitorId = req.params.visitorId;
-        const visitor = await findVisitor({ visitorId });
+        const visitor = await findVisitor({visitorId});
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -225,7 +211,7 @@ export async function getVisitorByDateNumberHandler(
         const wardrobe_number = req.params.wardrobeNumber;
         // console.log(date, wardrobe_number, '<<<< trying to find this visitor');
         const performance = await PerformanceModel.findOne(
-            { date: date },
+            {date: date},
             {},
             {}
         );
@@ -243,12 +229,13 @@ export async function getVisitorByDateNumberHandler(
         return res.sendStatus(400);
     }
 }
+
 export async function getVisitorByDateHandler(req: Request, res: Response) {
     try {
         console.log(req.params);
         const date = new Date(req.params.date);
         const performance = await PerformanceModel.findOne(
-            { date: date },
+            {date: date},
             {},
             {}
         );
@@ -277,23 +264,23 @@ function getVisitorHighest(visitor) {
 
     const redQuiz = visitor?.quiz_results
         ? visitor?.quiz_results?.map((qR) => {
-              return qR?.result_humanity_values?.fuchsia;
-          })
+            return qR?.result_humanity_values?.fuchsia;
+        })
         : [];
     const greenQuiz = visitor?.quiz_results
         ? visitor?.quiz_results?.map((qR) => {
-              return qR?.result_humanity_values?.lime;
-          })
+            return qR?.result_humanity_values?.lime;
+        })
         : [];
     const blueQuiz = visitor?.quiz_results
         ? visitor?.quiz_results?.map((qR) => {
-              return qR?.result_humanity_values?.silver;
-          })
+            return qR?.result_humanity_values?.silver;
+        })
         : [];
     const orangeQuiz = visitor?.quiz_results
         ? visitor?.quiz_results?.map((qR) => {
-              return qR?.result_humanity_values?.turq;
-          })
+            return qR?.result_humanity_values?.turq;
+        })
         : [];
 
     const redProducts = [];
@@ -365,11 +352,13 @@ function getVisitorHighest(visitor) {
     // console.log(highest);
     return highest;
 }
+
+
 export async function getSummaryByDate(req: Request, res: Response) {
     try {
         const date = new Date(req.params.date);
         const performance = await PerformanceModel.findOne(
-            { date: date },
+            {date: date},
             {},
             {}
         );
@@ -377,129 +366,18 @@ export async function getSummaryByDate(req: Request, res: Response) {
             path: 'game_steps',
         });
         console.log(games);
-        const products = await ProductModel.find();
 
-        console.log('bitch fucking ass');
-        console.log(performance.phases.length);
-        const gamesPreCapsule = games.filter(
-            (game) => game.pre_capsule && game.game_type !== 'SHOP'
-        );
-        console.log(gamesPreCapsule.length);
 
         const visitors = await VisitorModel.find({
             performance: performance._id,
-        })
-            .populate('quiz_results')
-            .populate({
-                path: 'basket',
-                populate: { path: 'products' },
-            });
-
-        const highestValuesVisitors = visitors.map((v) => ({
-            ...v,
-            highest: getVisitorHighest(v),
-        }));
-        let allQuizResults = [];
-        const productsInCapsule = [];
-        const capsuleProducts = [];
-        visitors.forEach((vis) => {
-            vis.basket.products.forEach((product) => {
-                productsInCapsule.push({
-                    title: product.title,
-                    image: product.image,
-                    visitorColor: vis.confirmed_humanity_value,
-                });
-            });
-            allQuizResults = [
-                ...allQuizResults,
-                ...vis.quiz_results.filter(
-                    (res) => res.result_text?.length > 1
-                ),
-            ];
-        });
-        products.forEach((cP) => {
-            const prod = {
-                title: cP.title,
-                image: cP.image,
-                count: productsInCapsule.filter((p) => p.image === cP.image)
-                    .length,
-                colors: {
-                    turq: productsInCapsule.filter(
-                        (p) => p.visitorColor === 'turq' && p.image === cP.image
-                    ).length,
-                    silver: productsInCapsule.filter(
-                        (p) =>
-                            p.visitorColor === 'silver' && p.image === cP.image
-                    ).length,
-                    fuchsia: productsInCapsule.filter(
-                        (p) =>
-                            p.visitorColor === 'fuchsia' && p.image === cP.image
-                    ).length,
-                    lime: productsInCapsule.filter(
-                        (p) => p.visitorColor === 'lime' && p.image === cP.image
-                    ).length,
-                },
-            };
-            capsuleProducts.push(prod);
         });
 
-        const humanityValuesByHighest = {
-            turq: highestValuesVisitors.filter((v) => v.highest === 'turq')
-                .length,
-            silver: highestValuesVisitors.filter((v) => v.highest === 'silver')
-                .length,
-            fuchsia: highestValuesVisitors.filter(
-                (v) => v.highest === 'fuchsia'
-            ).length,
-            lime: highestValuesVisitors.filter((v) => v.highest === 'lime')
-                .length,
-        };
-        const visitorsWereDividedIn = {
-            turq: visitors.filter((v) => v.confirmed_humanity_value === 'turq')
-                .length,
-            silver: visitors.filter(
-                (v) => v.confirmed_humanity_value === 'silver'
-            ).length,
-            fuchsia: visitors.filter(
-                (v) => v.confirmed_humanity_value === 'fuchsia'
-            ).length,
-            lime: visitors.filter((v) => v.confirmed_humanity_value === 'lime')
-                .length,
-        };
-        const countedStepsGames = [];
-
-        gamesPreCapsule.forEach((game) => {
-            const stepsWithCounts = [];
-            game.game_steps.forEach((oldStep) => {
-                const newOptions = [];
-                console.log('>>>>>', allQuizResults[0]);
-                console.log('step', oldStep);
-                oldStep.question_options.forEach((option) => {
-                    const newOption = { ...option, count: 0 };
-                    const counted = allQuizResults.filter((qr) => {
-                        console.log(qr._doc.step);
-                        if (qr._doc.step === oldStep._id) {
-                            return qr;
-                        }
-                    }).length;
-                    newOptions.push({ ...newOption, count: counted });
-                });
-                stepsWithCounts.push({ ...oldStep, newOptions });
-            });
-            countedStepsGames.push({ ...game, game_steps: stepsWithCounts });
-        });
 
         const performanceSummary = {
             performance: performance,
             amountOfVisitors: visitors.length,
             visitors: visitors,
-            humanityValuesByHighest,
-            visitorsWereDividedIn,
-            capsuleProducts,
-            gamesPreCapsule,
-            allQuizResults,
             games,
-            countedStepsGames,
         };
 
         return res.send(performanceSummary);
@@ -560,7 +438,7 @@ export async function deleteVisitorHandler(
         // const userId = res.locals.user._id;
         const visitorId = req.params.visitorId;
 
-        const visitor = await findVisitor({ visitorId });
+        const visitor = await findVisitor({visitorId});
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -570,7 +448,7 @@ export async function deleteVisitorHandler(
         //     return res.sendStatus(403);
         // }
 
-        await deleteVisitor({ visitorId });
+        await deleteVisitor({visitorId});
 
         return res.sendStatus(200);
     } catch (e) {
