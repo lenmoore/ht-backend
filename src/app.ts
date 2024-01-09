@@ -3,7 +3,6 @@ import logger from './utils/logger';
 import routes from './routes';
 import deserializeUser from './middleware/deserializeUser';
 import config from "../config/default";
-import cors from "cors";
 import express from "express";
 
 const port = process.env.PORT || config['port'] || 80;
@@ -12,24 +11,22 @@ console.log('PORT---->', port);
 const app = express();
 app.use(deserializeUser); // on every single request
 
-// app.use(bodyParser({ limit: '1gb' }));
 app.use(express.json({limit: '1gb'}));
 app.use(express.urlencoded({limit: '1gb'}));
 app.use(express.json());
-// use the express-static middleware
 app.use(express.static('public'));
 
-app.use(
-    cors({
-        origin: [
-            'http://localhost:8080',
-            'http://127.0.0.1:5173',
-            'https://127.0.0.1:5173',
-            '*',
-        ],
-        credentials: true,
-    })
-);
+// app.use(
+//     cors({
+//         origin: [
+//             'http://localhost:8080',
+//             'http://127.0.0.1:5173',
+//             'https://127.0.0.1:5173',
+//             '*',
+//         ],
+//         credentials: true,
+//     })
+// );
 // app.use(cors()); // comment this for deploy
 // and do app.listen for deploy
 // const key = fs.readFileSync('./localhost-key.pem');
@@ -38,7 +35,6 @@ app.use(
 
 // server.listen(port, async () => {
 app.listen(port, async () => {
-    // console.log('Broo;');
     logger.info('running on port ' + port);
 
     routes(app);

@@ -7,22 +7,11 @@ import {
 } from '../../service/performance/phase.service';
 import {
     CreatePhaseInput,
+    DeletePhaseInput,
     ReadPhaseInput,
     UpdatePhaseInput,
-    DeletePhaseInput,
 } from '../../schema/performance/phase.schema';
-import { Request, Response } from 'express';
-import {
-    findAndUpdateVisitor,
-    getAllVisitors,
-} from '../../service/performance/visitor.service';
-import { cloneDeep, now, shuffle } from 'lodash';
-import { Schema } from 'mongoose';
-
-import QuizResultModel from '../../models/performance/quiz-results.model';
-import quizResultsModel from '../../models/performance/quiz-results.model';
-import { findGame } from '../../service/performance/game.service';
-import VisitorModel from '../../models/performance/visitor.model';
+import {Request, Response} from 'express';
 
 export async function createPhaseHandler(
     req: Request<CreatePhaseInput>,
@@ -31,7 +20,7 @@ export async function createPhaseHandler(
     try {
         const body = req.body;
 
-        const Phase = await createPhase({ ...body });
+        const Phase = await createPhase({...body});
 
         return res.send(Phase);
     } catch (e) {
@@ -47,13 +36,13 @@ export async function updatePhaseHandler(
         const phaseId = req.params.phaseId;
         const update = req.body;
 
-        const phase = await findPhase({ phaseId });
+        const phase = await findPhase({phaseId});
 
         if (!phase) {
             return res.sendStatus(404);
         }
 
-        const updatedPhase = await findAndUpdatePhase({ phaseId }, update, {
+        const updatedPhase = await findAndUpdatePhase({phaseId}, update, {
             new: true,
         });
 
@@ -69,7 +58,7 @@ export async function getPhaseHandler(
 ) {
     try {
         const phaseId = req.params.phaseId;
-        const phase = await findPhase({ _id: phaseId });
+        const phase = await findPhase({_id: phaseId});
 
         if (!phase) {
             return res.sendStatus(404);
@@ -102,14 +91,14 @@ export async function deletePhaseHandler(
     try {
         const phaseId = req.params.phaseId;
 
-        const phase = await findPhase({ phaseId });
+        const phase = await findPhase({phaseId});
         // console.log(phase);
 
         if (!phase) {
             return res.sendStatus(404);
         }
 
-        await deletePhase({ phase });
+        await deletePhase({phase});
 
         return res.sendStatus(200);
     } catch (e) {

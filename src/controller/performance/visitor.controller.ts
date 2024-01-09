@@ -7,7 +7,6 @@ import {
 } from '../../schema/performance/visitor.schema';
 
 import {
-    confirmVisitorColors,
     createVisitor,
     deleteVisitor,
     findAndUpdateVisitor,
@@ -17,11 +16,9 @@ import {
 import {createUser} from '../../service/user.service';
 import {signVisitorAccessToken} from '../../service/auth.service';
 import {findAndUpdatePerformance, findPerformance,} from '../../service/performance/performance.service';
-import QuizResultModel from '../../models/performance/quiz-results.model';
 import VisitorModel from '../../models/performance/visitor.model';
 import PerformanceModel from '../../models/performance/performance.model';
-import GameModel from '../../models/performance/game.model';
-
+import GameModel from "../../models/performance/game.model";
 
 export async function createVisitorHandler(
     req: Request<CreateVisitorInput>,
@@ -74,15 +71,6 @@ export async function createVisitorHandler(
     }
 }
 
-export async function updateVisitorColorsHandler(req: Request, res: Response) {
-    try {
-        await confirmVisitorColors(req.body);
-        return res.sendStatus(204);
-    } catch (e) {
-        console.error(e);
-        return res.sendStatus(400);
-    }
-}
 
 export async function archiveVisitorsHandler(req: Request, res: Response) {
     try {
@@ -106,19 +94,6 @@ export async function archiveVisitors(update: any) {
     }
 }
 
-export async function updateQuizResult(req: Request, res: Response) {
-    try {
-        console.log(req.body.result_text);
-        const body = req.body;
-        const quizResult = await QuizResultModel.findByIdAndUpdate(
-            body._id,
-            body
-        );
-        res.send(quizResult);
-    } catch (e) {
-        console.error(e);
-    }
-}
 
 export async function updateVisitorHandler(
     req: Request<UpdateVisitorInput['params']>,
@@ -134,42 +109,11 @@ export async function updateVisitorHandler(
             return res.sendStatus(404);
         }
 
-        const addQuizResults = [];
-        if (update.quiz_results) {
-            const quizResults = update.quiz_results;
-            // console.log(quizResults);
-            for (const qr of quizResults) {
-                // console.log('QUIZ RESULT QUIZ RESULT ------------------', qr);
 
-                // console.log(qr._id);
-                if (qr._id == null) {
-                    const result = await QuizResultModel.create({
-                        ...qr,
-                        visitor: visitor,
-                        result_humanity_values: {
-                            lime: 0,
-                            fuchsia: 0,
-                            silver: 0,
-                            turq: 0,
-                        },
-                    });
-                    // console.log(result);
-                    addQuizResults.push(result);
-                } else {
-                    const result = await QuizResultModel.findByIdAndUpdate(
-                        {_id: qr._id},
-                        qr
-                    );
-                    addQuizResults.push(result);
-                    // console.log('SHOULD HAVE UPDATED', result);
-                }
-            }
-        }
         const updatedVisitor = await findAndUpdateVisitor(
             {visitorId},
             {
                 ...update,
-                quiz_results: addQuizResults,
             },
             {
                 new: true,

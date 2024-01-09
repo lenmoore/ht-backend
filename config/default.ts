@@ -1,6 +1,6 @@
 export default {
     port: 80,
-    dbUri: 'mongodb+srv://haihtuv-tln.iifie2e.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority',
+    dbUri: `mongodb+srv://len:Gwlwf4lShrSzRLLa@haihtuv-tln.iifie2e.mongodb.net/?retryWrites=true&w=majority"`,
     saltWorkFactor: 10,
     accessTokenTtl: '15m',
     refreshTokenTtl: '1y',
