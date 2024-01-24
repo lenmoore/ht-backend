@@ -16,7 +16,7 @@
     "url": "git+https://github.com/lenmoore/vivarium-backend.git"
   },
   "engines": {
-    "node": "18.2.0"
+    "node": "18.x"
   },
   "author": "lenmoore",
   "license": "ISC",
