@@ -3,10 +3,11 @@ import logger from './utils/logger';
 import routes from './routes';
 import deserializeUser from './middleware/deserializeUser';
 import express from 'express';
+import config from 'config';
 
-// const port = process.env.PORT || config['port'] || 80;
+const port = process.env.PORT || config['port'] || 80;
 // const port = config.get<number>('port');
-const port = 3000;
+// const port = 3000;
 console.log('PORT---->', port);
 const app = express();
 app.use(deserializeUser); // on every single request
