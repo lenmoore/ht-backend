@@ -1,12 +1,17 @@
-import { array, number, object, string, TypeOf } from 'zod';
+import { object, string, TypeOf } from 'zod';
+
+// const payload = {
+//     body: object({
+//         colour: string({
+//             required_error: 'colour',
+//         }),
+//         timers: array(object({ name: string(), minutes: number() })),
+//     }),
+// };
+
 
 const payload = {
-    body: object({
-        colour: string({
-            required_error: 'colour',
-        }),
-        timers: array(object({ name: string(), minutes: number() })),
-    }),
+    body: object({}),
 };
 
 const params = {

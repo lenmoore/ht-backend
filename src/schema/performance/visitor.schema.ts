@@ -1,16 +1,7 @@
-import { array, boolean, number, object, optional, string, TypeOf } from 'zod';
+import { array, boolean, object, optional, string, TypeOf } from 'zod';
 
 const payload = {
-    body: object({
-        username: string({
-            required_error: 'username is required',
-        }),
-        wardrobe_number: number({
-            required_error: 'wardrobe number is required',
-        }),
-        performance: optional(string()),
-        archived: optional(boolean()),
-    }),
+    body: object({}),
 };
 
 const params = {

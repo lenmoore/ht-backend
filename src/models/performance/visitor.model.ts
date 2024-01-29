@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import {customAlphabet} from 'nanoid';
-import {UserDocument} from '../user.model';
-import {PerformanceDocument} from './performance.model';
+import { customAlphabet } from 'nanoid';
+import { UserDocument } from '../user.model';
+import { PerformanceDocument } from './performance.model';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 10);
 
@@ -30,27 +30,28 @@ const visitorSchema = new mongoose.Schema(
             unique: true,
             default: () => `visitor_${nanoid()}`,
         },
-        user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         humanity_values: {
             lime: Number,
             fuchsia: Number,
             silver: Number,
             turq: Number,
         },
-        archived: {type: Boolean, default: false},
+        archived: { type: Boolean, default: false },
         performance: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Performance',
         },
-        username: {type: String, required: false},
-        wardrobe_number: {type: Number, required: true},
-        wants_newsletter: {type: Boolean, required: true},
+        username: { type: String, required: false },
+        wardrobe_number: { type: Number, required: true },
+        wants_newsletter: { type: Boolean, required: true },
 
-        accessToken: {type: String, default: ''},
+
+        accessToken: { type: String, default: '' },
     },
     {
         timestamps: true,
-    }
+    },
 );
 const VisitorModel = mongoose.model<VisitorDocument>('Visitor', visitorSchema);
 
