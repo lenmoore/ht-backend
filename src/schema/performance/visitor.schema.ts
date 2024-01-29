@@ -1,4 +1,4 @@
-import {array, boolean, number, object, optional, string, TypeOf} from 'zod';
+import { array, boolean, number, object, optional, string, TypeOf } from 'zod';
 
 const payload = {
     body: object({
@@ -8,8 +8,6 @@ const payload = {
         wardrobe_number: number({
             required_error: 'wardrobe number is required',
         }),
-        basket: optional(object({})),
-        quiz_results: optional(array(object({}))),
         performance: optional(string()),
         archived: optional(boolean()),
     }),
@@ -23,13 +21,13 @@ const params = {
         basket: optional(
             object({
                 basket_id: string(),
-            })
+            }),
         ),
         quiz_results: optional(array(object({}))),
         performance: optional(
             object({
                 performance_id: string(),
-            })
+            }),
         ),
         archived: optional(boolean()),
     }),

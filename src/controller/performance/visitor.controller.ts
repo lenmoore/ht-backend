@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import {
     CreateVisitorInput,
     DeleteVisitorInput,
@@ -13,16 +13,16 @@ import {
     findVisitor,
     getAllVisitors,
 } from '../../service/performance/visitor.service';
-import {createUser} from '../../service/user.service';
-import {signVisitorAccessToken} from '../../service/auth.service';
-import {findAndUpdatePerformance, findPerformance,} from '../../service/performance/performance.service';
+import { createUser } from '../../service/user.service';
+import { signVisitorAccessToken } from '../../service/auth.service';
+import { findAndUpdatePerformance, findPerformance } from '../../service/performance/performance.service';
 import VisitorModel from '../../models/performance/visitor.model';
 import PerformanceModel from '../../models/performance/performance.model';
-import GameModel from "../../models/performance/game.model";
+import GameModel from '../../models/performance/game.model';
 
 export async function createVisitorHandler(
     req: Request<CreateVisitorInput>,
-    res: Response
+    res: Response,
 ) {
     try {
         const user = await createUser({
@@ -42,27 +42,27 @@ export async function createVisitorHandler(
 
         const body = req.body;
 
-        let visitor = await createVisitor({...body, user: userId});
+        let visitor = await createVisitor({ ...body, user: userId });
 
         const performance = await findPerformance({
             performanceId: body.performance,
         });
 
         visitor = await findAndUpdateVisitor(
-            {_id: visitor._id},
+            { _id: visitor._id },
             {
                 performance: performance,
             },
             {
                 new: true,
-            }
+            },
         );
         await findAndUpdatePerformance(
-            {performanceId: body.performance},
-            {visitors: [...performance.visitors, visitor._id]},
+            { performanceId: body.performance },
+            { visitors: [...performance.visitors, visitor._id] },
             {
                 new: true,
-            }
+            },
         );
         visitor.accessToken = accessToken; // just in case
         return res.send(visitor);
@@ -86,8 +86,8 @@ export async function archiveVisitors(update: any) {
     try {
         // console.log('update:', update);
         await VisitorModel.updateMany(
-            {performance: update._id},
-            {archived: true}
+            { performance: update._id },
+            { archived: true },
         );
     } catch (e) {
         console.error(e);
@@ -96,14 +96,14 @@ export async function archiveVisitors(update: any) {
 
 
 export async function updateVisitorHandler(
-    req: Request<UpdateVisitorInput['params']>,
-    res: Response
+    req: Request<UpdateVisitorInput['params']> | any,
+    res: Response,
 ) {
     try {
         const visitorId = req.params.visitorId;
         const update = req.body;
 
-        const visitor = await findVisitor({visitorId});
+        const visitor = await findVisitor({ visitorId });
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -111,13 +111,13 @@ export async function updateVisitorHandler(
 
 
         const updatedVisitor = await findAndUpdateVisitor(
-            {visitorId},
+            { visitorId },
             {
                 ...update,
             },
             {
                 new: true,
-            }
+            },
         );
 
         return res.send(updatedVisitor);
@@ -128,12 +128,12 @@ export async function updateVisitorHandler(
 }
 
 export async function getVisitorHandler(
-    req: Request<ReadVisitorInput['params']>,
-    res: Response
+    req: Request<ReadVisitorInput['params']> | any,
+    res: Response,
 ) {
     try {
         const visitorId = req.params.visitorId;
-        const visitor = await findVisitor({visitorId});
+        const visitor = await findVisitor({ visitorId });
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -148,16 +148,16 @@ export async function getVisitorHandler(
 
 export async function getVisitorByDateNumberHandler(
     req: Request,
-    res: Response
+    res: Response,
 ) {
     try {
         const date = new Date(req.params.date);
         const wardrobe_number = req.params.wardrobeNumber;
         // console.log(date, wardrobe_number, '<<<< trying to find this visitor');
         const performance = await PerformanceModel.findOne(
-            {date: date},
+            { date: date },
             {},
-            {}
+            {},
         );
         // console.log('found performance: ', performance);
 
@@ -179,9 +179,9 @@ export async function getVisitorByDateHandler(req: Request, res: Response) {
         console.log(req.params);
         const date = new Date(req.params.date);
         const performance = await PerformanceModel.findOne(
-            {date: date},
+            { date: date },
             {},
-            {}
+            {},
         );
         console.log('found performance: ', performance);
 
@@ -191,7 +191,7 @@ export async function getVisitorByDateHandler(req: Request, res: Response) {
         // console.log(visitor);
 
         const sortedVisitors = visitors.sort(
-            (a, b) => a.wardrobe_number - b.wardrobe_number
+            (a, b) => a.wardrobe_number - b.wardrobe_number,
         );
         return res.send(sortedVisitors);
     } catch (err) {
@@ -200,111 +200,14 @@ export async function getVisitorByDateHandler(req: Request, res: Response) {
     }
 }
 
-function getVisitorHighest(visitor) {
-    // console.log(visitor);
-    // console.log(visitor.basket);
-    // console.log('-----\n', visitor.wardrobe_number);
-    const basket = visitor.basket;
-
-    const redQuiz = visitor?.quiz_results
-        ? visitor?.quiz_results?.map((qR) => {
-            return qR?.result_humanity_values?.fuchsia;
-        })
-        : [];
-    const greenQuiz = visitor?.quiz_results
-        ? visitor?.quiz_results?.map((qR) => {
-            return qR?.result_humanity_values?.lime;
-        })
-        : [];
-    const blueQuiz = visitor?.quiz_results
-        ? visitor?.quiz_results?.map((qR) => {
-            return qR?.result_humanity_values?.silver;
-        })
-        : [];
-    const orangeQuiz = visitor?.quiz_results
-        ? visitor?.quiz_results?.map((qR) => {
-            return qR?.result_humanity_values?.turq;
-        })
-        : [];
-
-    const redProducts = [];
-    const silverProducts = [];
-    const limeProducts = [];
-    const turqProducts = [];
-    // todo something got fucked up here idkkk.
-    // redProducts = allProducts.map(
-    //     (p) =>
-    //         p?.humanity_values?.fuchsia?.average ||
-    //         p?.humanity_values?.red?.average ||
-    //         0
-    // );
-    // silverProducts = allProducts.map(
-    //     (p) =>
-    //         p?.humanity_values?.blue?.average ||
-    //         p?.humanity_values?.silver?.average ||
-    //         0
-    // );
-    // limeProducts = allProducts.map(
-    //     (p) =>
-    //         p?.humanity_values?.lime?.average ||
-    //         p?.humanity_values?.green?.average ||
-    //         0
-    // );
-    // turqProducts = allProducts.map(
-    //     (p) =>
-    //         p?.humanity_values?.turq?.average ||
-    //         p?.humanity_values?.orange?.average ||
-    //         0
-    // );
-    const fuchsia = [...redQuiz, ...redProducts];
-    const lime = [...greenQuiz, ...limeProducts];
-    const silver = [...blueQuiz, ...silverProducts];
-    const turq = [...orangeQuiz, ...turqProducts];
-    const absolute_hum_values = {
-        lime: lime?.reduce((a, b) => a + b, 0),
-        fuchsia: fuchsia?.reduce((a, b) => a + b, 0),
-        silver: silver?.reduce((a, b) => a + b, 0),
-        turq: turq?.reduce((a, b) => a + b, 0),
-    };
-
-    const sum =
-        absolute_hum_values.fuchsia +
-        absolute_hum_values.lime +
-        absolute_hum_values.silver +
-        absolute_hum_values.turq;
-    const avg_hum_values = [
-        {
-            color: 'lime',
-            value: absolute_hum_values?.lime / sum,
-        },
-        {
-            color: 'fuchsia',
-            value: absolute_hum_values?.fuchsia / sum,
-        },
-        {
-            color: 'turq',
-            value: absolute_hum_values?.turq / sum,
-        },
-
-        {
-            color: 'silver',
-            value: absolute_hum_values?.silver / sum,
-        },
-    ];
-    const highest = avg_hum_values.sort((a, b) => b.value - a.value)[0].color;
-    // console.log(avg_hum_values);
-    // console.log(highest);
-    return highest;
-}
-
 
 export async function getSummaryByDate(req: Request, res: Response) {
     try {
         const date = new Date(req.params.date);
         const performance = await PerformanceModel.findOne(
-            {date: date},
+            { date: date },
             {},
-            {}
+            {},
         );
         const games = await GameModel.find().populate({
             path: 'game_steps',
@@ -333,7 +236,7 @@ export async function getSummaryByDate(req: Request, res: Response) {
 
 export async function getPerformanceVisitorsHandler(
     req: Request,
-    res: Response
+    res: Response,
 ) {
     let visitors = [];
     try {
@@ -376,13 +279,13 @@ export async function getVisitorsHandler(req: Request, res: Response) {
 
 export async function deleteVisitorHandler(
     req: Request<DeleteVisitorInput['params']>,
-    res: Response
+    res: Response,
 ) {
     try {
         // const userId = res.locals.user._id;
         const visitorId = req.params.visitorId;
 
-        const visitor = await findVisitor({visitorId});
+        const visitor = await findVisitor({ visitorId });
 
         if (!visitor) {
             return res.sendStatus(404);
@@ -392,7 +295,7 @@ export async function deleteVisitorHandler(
         //     return res.sendStatus(403);
         // }
 
-        await deleteVisitor({visitorId});
+        await deleteVisitor({ visitorId });
 
         return res.sendStatus(200);
     } catch (e) {
