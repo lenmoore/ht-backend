@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { logger } from '../../logger';
 import { hash, resFailed, resSuccess } from '../../extras/helpers';
 import UserService from '../../services/user.service';
-import { UserDocument } from '../../mongo/models/user.model';
+import { UserDocument } from '../../models/user.model';
 
 async function getAllUsers(_: Request, res: Response): Promise<Response> {
     try {

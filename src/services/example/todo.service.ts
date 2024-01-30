@@ -1,5 +1,5 @@
 import mongoose, { FilterQuery, UpdateQuery } from 'mongoose';
-import TodoModel, { TodoDocument } from '../../mongo/models/example/todo.model';
+import TodoModel, { TodoDocument } from '../../models/example/todo.model';
 
 async function getAllTodos(filter: FilterQuery<TodoDocument> = {}): Promise<TodoDocument[]> {
     return await TodoModel.find(filter);

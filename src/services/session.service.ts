@@ -1,6 +1,6 @@
 import mongoose, { FilterQuery, ProjectionType, UpdateQuery } from 'mongoose';
 import UserService from './user.service';
-import SessionModel, { SessionDocument } from '../mongo/models/session.model';
+import SessionModel, { SessionDocument } from '../models/session.model';
 
 async function getAllSessions(filter: FilterQuery<SessionDocument> = {}): Promise<SessionDocument[]> {
     return await SessionModel.find(filter);

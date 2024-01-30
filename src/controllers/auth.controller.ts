@@ -11,7 +11,7 @@ import { compare, hash, resFailed, resSuccess } from '../extras/helpers';
 import SessionService from '../services/session.service';
 import UserService from '../services/user.service';
 import { logger } from '../logger';
-import { UserDocument } from '../mongo/models/user.model';
+import { UserDocument } from '../models/user.model';
 
 async function register(req: Request, res: Response): Promise<Response> {
     try {
