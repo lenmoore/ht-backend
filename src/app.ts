@@ -1,41 +1,80 @@
-import connect from './utils/connect';
-import logger from './utils/logger';
-import routes from './routes';
-import deserializeUser from './middleware/deserializeUser';
 import express from 'express';
+import cors, { CorsOptions } from 'cors';
+import rateLimit, { Options } from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import * as mongoose from 'mongoose';
+import { logger } from '@typegoose/typegoose/lib/logSettings';
+import { MONGO_URI, PORT, TRUSTED_DOMAINS } from '../config/env';
 
-const port = process.env.PORT || 80;
-// const port = config.get<number>('port');
-// const port = 3000;
-console.log('PORT---->', port);
-const app = express();
-app.use(deserializeUser); // on every single request
 
-app.use(express.json({ limit: '1gb' }));
+import healthCheckRoutes from './routes/health-check.route';
+import mainRoutes from './routes/main.route';
+import authRoutes from './routes/auth.route';
+import userRoutes from './routes/admin/user.route';
+import todoRoutes from './routes/example/todo.route';
+
+import auth from './extras/middlewares/auth.middleware';
+import isAdmin from './extras/middlewares/is-admin.middleware';
+
+import { resFailed } from './extras/helpers';
+
+async function connectToMongo(): Promise<void> {
+    console.log('connectToMongoUri', MONGO_URI);
+    const connect = async () => {
+        try {
+            const conn = await mongoose.connect(MONGO_URI);
+            const message = `MongoDB Connected: ${conn.connection.host}:${conn.connection.port}`;
+            logger.info('Database', message);
+        } catch (error: any) {
+            logger.error('Database', error.message);
+            return process.exit(1);
+        }
+    };
+
+    try {
+        await connect();
+        logger.info('connected to DB!');
+    } catch (err) {
+        return logger.error(err);
+    }
+}
+
+const corsConfig = (): CorsOptions => ({
+    origin: TRUSTED_DOMAINS,
+    credentials: true,
+});
+const limitConf = (): Partial<Options> => ({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: 'draft-7',
+    legacyHeaders: true,
+    statusCode: 429,
+    message: 'Too many requests, please try again later.',
+});
+
+
+// app init
+let app = express();
+
+app.use(cors(corsConfig()));
+app.use(rateLimit(limitConf()));
+app.use(cookieParser());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
-// app.use(
-//     cors({
-//         origin: [
-//             'http://localhost:8080',
-//             'http://127.0.0.1:5173',
-//             'https://127.0.0.1:5173',
-//             '*',
-//         ],
-//         credentials: true,
-//     })
-// );
-// app.use(cors()); // comment this for deploy
-// and do app.listen for deploy
-// const key = fs.readFileSync('./localhost-key.pem');
-// const cert = fs.readFileSync('./localhost.pem');
-// const server = https.createServer({ key: key, cert: cert }, app);
+// add routes by module
+app.use('/api', mainRoutes);
+app.use('/api/health-check', healthCheckRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin/users', auth, isAdmin, userRoutes);
+app.use('/api/todos', auth, todoRoutes);
+app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
 
-// server.listen(port, async () => {
-app.listen(port, async () => {
-    logger.info('running on port ' + port);
+logger.info(PORT);
+app.listen(PORT, async () => {
+    console.log('running on port ' + PORT);
 
-    routes(app);
-    await connect();
+    await connectToMongo();
 });
