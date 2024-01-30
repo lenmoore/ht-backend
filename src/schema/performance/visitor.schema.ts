@@ -6,9 +6,7 @@ const payload = {
 
 const params = {
     params: object({
-        visitorId: string({
-            required_error: 'visitorId is required',
-        }),
+        visitorId: optional(string({})),
         basket: optional(
             object({
                 basket_id: string(),

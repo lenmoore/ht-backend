@@ -26,17 +26,12 @@ const visitorSchema = new mongoose.Schema(
     {
         visitorId: {
             type: String,
-            required: true,
+            required: false,
             unique: true,
             default: () => `visitor_${nanoid()}`,
         },
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        humanity_values: {
-            lime: Number,
-            fuchsia: Number,
-            silver: Number,
-            turq: Number,
-        },
+
         archived: { type: Boolean, default: false },
         performance: {
             type: mongoose.Schema.Types.ObjectId,
