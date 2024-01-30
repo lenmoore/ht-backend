@@ -20,10 +20,12 @@ export async function createVisitorHandler(
 ) {
     try {
         const user = await createUser({
-            name: req.body.username,
-            password: req.body.wardrobe_number,
-            passwordConfirmation: req.body.wardrobe_number,
-            email: req.body.email || '',
+            body: {
+                name: req.body.username,
+                password: req.body.wardrobe_number,
+                passwordConfirmation: req.body.wardrobe_number,
+                email: req.body.email || '',
+            },
         });
 
         // sign an access token for the visitor; this is a default 1 day length token
