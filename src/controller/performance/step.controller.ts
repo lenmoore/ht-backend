@@ -6,10 +6,9 @@ import {
     findStep,
     getAllSteps,
 } from '../../service/performance/step.service';
-import { CreateStepInput } from '../../schema/performance/step.schema';
 
 export async function createStepHandler(
-    req: Request<CreateStepInput>,
+    req: Request,
     res: Response,
 ) {
     try {

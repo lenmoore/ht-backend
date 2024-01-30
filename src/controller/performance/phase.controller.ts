@@ -5,11 +5,10 @@ import {
     findPhase,
     getAllPhases,
 } from '../../service/performance/phase.service';
-import { CreatePhaseInput } from '../../schema/performance/phase.schema';
 import { Request, Response } from 'express';
 
 export async function createPhaseHandler(
-    req: Request<CreatePhaseInput>,
+    req: Request,
     res: Response,
 ) {
     try {

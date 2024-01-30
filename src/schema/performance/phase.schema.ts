@@ -1,4 +1,4 @@
-import { object, optional, string, boolean, TypeOf } from 'zod';
+import { boolean, object, optional, string, TypeOf } from 'zod';
 
 const payload = {
     body: object({
@@ -16,9 +16,7 @@ const payload = {
 
 const params = {
     params: object({
-        phaseId: string({
-            required_error: 'id is required',
-        }),
+        phaseId: string({}),
     }),
 };
 
