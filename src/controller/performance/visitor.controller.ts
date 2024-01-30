@@ -1,10 +1,5 @@
 import { Request, Response } from 'express';
-import {
-    CreateVisitorInput,
-    DeleteVisitorInput,
-    ReadVisitorInput,
-    UpdateVisitorInput,
-} from '../../schema/performance/visitor.schema';
+import { CreateVisitorInput, DeleteVisitorInput } from '../../schema/performance/visitor.schema';
 
 import {
     createVisitor,
@@ -96,7 +91,7 @@ export async function archiveVisitors(update: any) {
 
 
 export async function updateVisitorHandler(
-    req: Request<UpdateVisitorInput['params']> | any,
+    req: Request,
     res: Response,
 ) {
     try {
@@ -128,7 +123,7 @@ export async function updateVisitorHandler(
 }
 
 export async function getVisitorHandler(
-    req: Request<ReadVisitorInput['params']> | any,
+    req: Request,
     res: Response,
 ) {
     try {
