@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { CreateVisitorInput, DeleteVisitorInput } from '../../schema/performance/visitor.schema';
 
 import {
     createVisitor,
@@ -16,7 +15,7 @@ import PerformanceModel from '../../models/performance/performance.model';
 import GameModel from '../../models/performance/game.model';
 
 export async function createVisitorHandler(
-    req: Request<CreateVisitorInput>,
+    req: Request,
     res: Response,
 ) {
     try {
@@ -273,7 +272,7 @@ export async function getVisitorsHandler(req: Request, res: Response) {
 }
 
 export async function deleteVisitorHandler(
-    req: Request<DeleteVisitorInput['params']>,
+    req: Request,
     res: Response,
 ) {
     try {

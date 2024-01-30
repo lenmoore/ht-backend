@@ -1,10 +1,4 @@
 import {
-    CreateGameInput,
-    DeleteGameInput,
-    ReadGameInput,
-    UpdateGameInput,
-} from '../../schema/performance/game.schema';
-import {
     createGame,
     deleteGame,
     findAndUpdateGame,
@@ -12,16 +6,11 @@ import {
     getAllGames,
 } from '../../service/performance/game.service';
 import { Request, Response } from 'express';
-import { createStepHandler } from './step.controller';
-import {
-    createStep,
-    findAndUpdateStep,
-} from '../../service/performance/step.service';
-import StepModel from '../../models/performance/step.model';
+import { createStep, findAndUpdateStep } from '../../service/performance/step.service';
 
 export async function createGameHandler(
-    req: Request<CreateGameInput>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     const body = req.body;
 
@@ -35,8 +24,8 @@ export async function createGameHandler(
 }
 
 export async function updateGameHandler(
-    req: Request<UpdateGameInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const gameId = req.params.gameId;
@@ -55,7 +44,7 @@ export async function updateGameHandler(
                     await findAndUpdateStep(
                         { _id: requestStep._id },
                         requestStep,
-                        { new: true }
+                        { new: true },
                     );
                 } else {
                     // create new
@@ -81,8 +70,8 @@ export async function updateGameHandler(
 }
 
 export async function getGameHandler(
-    req: Request<ReadGameInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const gameId = req.params.gameId;
@@ -113,8 +102,8 @@ export async function getGamesHandler(req: Request, res: Response) {
 }
 
 export async function deleteGameHandler(
-    req: Request<DeleteGameInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const gameId = req.params.gameId;

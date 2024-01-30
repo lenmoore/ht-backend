@@ -6,16 +6,10 @@ import {
     findPerformance,
     getAllPerformances,
 } from '../../service/performance/performance.service';
-import {
-    CreatePerformanceInput,
-    DeletePerformanceInput,
-    ReadPerformanceInput,
-    UpdatePerformanceInput,
-} from '../../schema/performance/performance.schema';
 
 export async function createPerformanceHandler(
-    req: Request<CreatePerformanceInput>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const userId = res.locals.user._id;
@@ -31,8 +25,8 @@ export async function createPerformanceHandler(
 }
 
 export async function updatePerformanceHandler(
-    req: Request<UpdatePerformanceInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const performanceId = req.params.performanceId;
@@ -43,7 +37,7 @@ export async function updatePerformanceHandler(
             update,
             {
                 new: true,
-            }
+            },
         );
 
         // console.log(updatedPerformance);
@@ -54,8 +48,8 @@ export async function updatePerformanceHandler(
 }
 
 export async function getPerformanceHandler(
-    req: Request<ReadPerformanceInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const performanceId = req.params.performanceId;
@@ -88,8 +82,8 @@ export async function getPerformancesHandler(req: Request, res: Response) {
 }
 
 export async function deletePerformanceHandler(
-    req: Request<DeletePerformanceInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const userId = res.locals.user._id;

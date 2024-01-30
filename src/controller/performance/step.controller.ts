@@ -6,16 +6,11 @@ import {
     findStep,
     getAllSteps,
 } from '../../service/performance/step.service';
-import {
-    CreateStepInput,
-    DeleteStepInput,
-    ReadStepInput,
-    UpdateStepInput,
-} from '../../schema/performance/step.schema';
+import { CreateStepInput } from '../../schema/performance/step.schema';
 
 export async function createStepHandler(
     req: Request<CreateStepInput>,
-    res: Response
+    res: Response,
 ) {
     try {
         const body = req.body;
@@ -29,8 +24,8 @@ export async function createStepHandler(
 }
 
 export async function updateStepHandler(
-    req: Request<UpdateStepInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const stepId = req.params.stepId;
@@ -53,8 +48,8 @@ export async function updateStepHandler(
 }
 
 export async function getStepHandler(
-    req: Request<ReadStepInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const stepId = req.params.stepId;
@@ -85,8 +80,8 @@ export async function getStepsHandler(req: Request, res: Response) {
 }
 
 export async function deleteStepHandler(
-    req: Request<DeleteStepInput['params']>,
-    res: Response
+    req: Request,
+    res: Response,
 ) {
     try {
         const stepId = req.params.stepId;

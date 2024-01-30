@@ -3,12 +3,11 @@ import { get } from 'lodash';
 
 import { findSessionById, signAccessToken, signRefreshToken } from '../service/auth.service';
 import { findUserByEmail, findUserById, validatePassword } from '../service/user.service';
-import { CreateSessionInput } from '../schema/session.schema';
 import { verifyJwt } from '../utils/jwt.utils';
 
 export async function createSessionHandler(
     // eslint-disable-next-line @typescript-eslint/ban-types
-    req: Request<CreateSessionInput>,
+    req: Request,
     res: Response,
 ) {
     try {
