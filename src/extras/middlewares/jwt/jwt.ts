@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export function generateToken(payload: object | string = {}, tokenSecret: string, expired: string | number): string {
+    console.log(payload);
     return jwt.sign(payload, tokenSecret as string, { expiresIn: expired });
 }
 

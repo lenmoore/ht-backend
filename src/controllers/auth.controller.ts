@@ -39,8 +39,10 @@ async function register(req: Request, res: Response): Promise<Response> {
 
 async function login(req: Request, res: Response): Promise<Response> {
     try {
-        const { loginType, password } = req.body;
-        const filter: mongoose.FilterQuery<UserDocument> = { $or: [{ email: loginType }, { phoneNumber: loginType }] };
+        console.log('trying to login, ', req.body);
+        const { email, password } = req.body;
+        console.log(email);
+        const filter: mongoose.FilterQuery<UserDocument> = { email: email };
         const user: UserDocument | null = await UserService.getOneUser(filter, {}, false);
 
         if (!user) {
