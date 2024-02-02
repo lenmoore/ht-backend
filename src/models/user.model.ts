@@ -6,7 +6,7 @@ export interface UserInput {
     password: string;
     admin: boolean;
     actor: boolean;
-    actor_color: string;
+    group_name: string;
 }
 
 // role: 'admin', 'actor', 'user'
@@ -16,7 +16,7 @@ export interface UserDocument extends UserInput, mongoose.Document {
     password: string;
     admin: boolean;
     actor: boolean;
-    actor_color: string;
+    group_name: string;
     role: string;
     createdAt: Date;
     updatedAt: Date;
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true },
         name: { type: String, required: true },
         password: { type: String, required: true },
-        actor_color: { type: String, default: '' },
+        group_name: { type: String, default: '' },
         admin: { type: Boolean, default: false },
         actor: { type: Boolean, default: false },
     },

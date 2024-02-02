@@ -44,6 +44,7 @@ async function login(req: Request, res: Response): Promise<Response> {
         console.log(email);
         const filter: mongoose.FilterQuery<UserDocument> = { email: email };
         const user: UserDocument | null = await UserService.getOneUser(filter, {}, false);
+        console.log(user);
 
         if (!user) {
             const message = 'User not found';
@@ -77,7 +78,7 @@ async function login(req: Request, res: Response): Promise<Response> {
         });
 
         const message = 'Login success';
-        return resSuccess(res, 200, message, { accessToken, refreshToken });
+        return resSuccess(res, 200, message, { accessToken, refreshToken, user });
     } catch (error: any) {
         logger.error(login.name, error.message);
         return resFailed(res, 500, error.message);
