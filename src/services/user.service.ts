@@ -1,5 +1,5 @@
 import mongoose, { FilterQuery, ProjectionType, UpdateQuery } from 'mongoose';
-import UserModel, { UserDocument } from '../mongo/models/user.model';
+import UserModel, { UserDocument } from '../models/user.model';
 
 async function getAllUsers(filter: FilterQuery<UserDocument> = {}): Promise<UserDocument[]> {
     return UserModel.find(filter, { password: 0, __v: 0 });

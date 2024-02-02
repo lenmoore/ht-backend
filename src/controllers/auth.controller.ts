@@ -11,7 +11,7 @@ import { compare, hash, resFailed, resSuccess } from '../extras/helpers';
 import SessionService from '../services/session.service';
 import UserService from '../services/user.service';
 import { logger } from '../logger';
-import { UserDocument } from '../mongo/models/user.model';
+import { UserDocument } from '../models/user.model';
 
 async function register(req: Request, res: Response): Promise<Response> {
     try {
@@ -39,8 +39,10 @@ async function register(req: Request, res: Response): Promise<Response> {
 
 async function login(req: Request, res: Response): Promise<Response> {
     try {
-        const { loginType, password } = req.body;
-        const filter: mongoose.FilterQuery<UserDocument> = { $or: [{ email: loginType }, { phoneNumber: loginType }] };
+        console.log('trying to login, ', req.body);
+        const { email, password } = req.body;
+        console.log(email);
+        const filter: mongoose.FilterQuery<UserDocument> = { email: email };
         const user: UserDocument | null = await UserService.getOneUser(filter, {}, false);
 
         if (!user) {
@@ -58,8 +60,8 @@ async function login(req: Request, res: Response): Promise<Response> {
         }
 
         const JWTPayload = { id: user._id, email: user.email, role: user.role };
-        const accessToken = generateAccessToken(JWTPayload, '5h');
-        const refreshToken = generateRefreshToken(JWTPayload, '5d');
+        const accessToken = generateAccessToken(JWTPayload, '30d');
+        const refreshToken = generateRefreshToken(JWTPayload, '30d');
 
         const date = new Date();
         const sessionObj = { refreshToken, userId: user._id, expiresAt: date.setDate(date.getDate() + 5) };
