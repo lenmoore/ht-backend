@@ -58,8 +58,8 @@ async function login(req: Request, res: Response): Promise<Response> {
         }
 
         const JWTPayload = { id: user._id, email: user.email, role: user.role };
-        const accessToken = generateAccessToken(JWTPayload, '5h');
-        const refreshToken = generateRefreshToken(JWTPayload, '5d');
+        const accessToken = generateAccessToken(JWTPayload, '30d');
+        const refreshToken = generateRefreshToken(JWTPayload, '30d');
 
         const date = new Date();
         const sessionObj = { refreshToken, userId: user._id, expiresAt: date.setDate(date.getDate() + 5) };
