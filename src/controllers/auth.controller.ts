@@ -60,7 +60,7 @@ async function login(req: Request, res: Response): Promise<Response> {
             console.log('password matched!');
         }
 
-        const JWTPayload = { id: user._id, email: user.email, role: user.role };
+        const JWTPayload = { id: user._id, email: user.email };
         const accessToken = generateAccessToken(JWTPayload, '30d');
         const refreshToken = generateRefreshToken(JWTPayload, '30d');
 
@@ -130,7 +130,7 @@ async function refreshToken(req: Request, res: Response): Promise<Response> {
             return resFailed(res, 404, message);
         }
 
-        const JWTPayload = { id: user._id, email: user.email, role: user.role };
+        const JWTPayload = { id: user._id, email: user.email };
         const accessToken = generateAccessToken(JWTPayload, '5h');
         const refreshToken = generateRefreshToken(JWTPayload, '5d');
 
