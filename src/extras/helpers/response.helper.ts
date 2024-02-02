@@ -5,5 +5,6 @@ export function resSuccess(res: Response, status: number, message: string, data?
 }
 
 export function resFailed(res: Response, status: number, message: string, error?: object | any): Response {
+    console.log(message);
     return res.status(status).type('application/json').json({ success: false, message, error });
 }

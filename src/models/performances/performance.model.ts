@@ -1,5 +1,5 @@
 import { UserDocument } from '../user.model';
-import { PhaseDocument } from './phase.model';
+import { SceneDocument } from './scene.model';
 import mongoose from 'mongoose';
 
 export interface PerformanceDocument extends mongoose.Document {
@@ -8,7 +8,7 @@ export interface PerformanceDocument extends mongoose.Document {
     title: string;
     date: Date;
     description: string;
-    phases: PhaseDocument[];
+    phases: SceneDocument[];
 }
 
 const performanceSchema = new mongoose.Schema({

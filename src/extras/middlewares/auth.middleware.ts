@@ -6,7 +6,6 @@ import { logger } from '@typegoose/typegoose/lib/logSettings';
 
 export default async function auth(req: IRequest, res: Response, next: NextFunction): Promise<void | Response> {
     try {
-        console.log('trying to authorise', req.body);
         const authHeader = req.headers.authorization;
         const token = authHeader && authHeader.split(' ')[1];
         console.log(token);
@@ -14,7 +13,6 @@ export default async function auth(req: IRequest, res: Response, next: NextFunct
 
         try {
             await verifyAccessToken(token);
-            console.log(token);
             const decoded = getUserPayloadFromAccessToken(token) as any;
             console.log(decoded);
             req.user = decoded;

@@ -13,6 +13,7 @@ import mainRoutes from './routes/main.route';
 import authRoutes from './routes/auth.route';
 import userRoutes from './routes/admin/user.route';
 import todoRoutes from './routes/example/todo.route';
+import sceneRoutes from './routes/admin/scene.route';
 
 import auth from './extras/middlewares/auth.middleware';
 import isAdmin from './extras/middlewares/is-admin.middleware';
@@ -25,9 +26,9 @@ async function connectToMongo(): Promise<void> {
         try {
             const conn = await mongoose.connect(MONGO_URI);
             const message = `MongoDB Connected: ${conn.connection.host}:${conn.connection.port}`;
-            logger.info('Database', message);
+            console.info('Database', message);
         } catch (error: any) {
-            logger.error('Database', error.message);
+            console.error('Database', error.message);
             return process.exit(1);
         }
     };
@@ -69,8 +70,10 @@ app.use('/api', mainRoutes);
 app.use('/api/health-check', healthCheckRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin/users', auth, isAdmin, userRoutes);
+app.use('/api/admin/scenes', auth, isAdmin, sceneRoutes);
 app.use('/api/todos', auth, todoRoutes);
 app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
+app.use((_, res) => resFailed(res, 500, 'Shithouse'));
 
 logger.info(PORT);
 app.listen(PORT, async () => {
