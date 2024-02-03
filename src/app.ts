@@ -1,6 +1,5 @@
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
-import rateLimit, { Options } from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import * as mongoose from 'mongoose';
@@ -46,21 +45,20 @@ const corsConfig = (): CorsOptions => ({
     origin: TRUSTED_DOMAINS,
     credentials: true,
 });
-const limitConf = (): Partial<Options> => ({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    standardHeaders: 'draft-7',
-    legacyHeaders: true,
-    statusCode: 429,
-    message: 'Too many requests, please try again later.',
-});
+// const limitConf = (): Partial<Options> => ({
+//     windowMs: 15 * 60 * 1000,
+//     standardHeaders: 'draft-7',
+//     legacyHeaders: true,
+//     statusCode: 429,
+//     message: 'Too many requests, please try again later.',
+// });
 
 
 // app init
 let app = express();
 
 app.use(cors(corsConfig()));
-app.use(rateLimit(limitConf()));
+// app.use(rateLimit(limitConf()));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

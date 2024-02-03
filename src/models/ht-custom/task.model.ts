@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema({
         description: { type: String, required: true },
         duration: { type: Number, required: true },
         orderNumber: { type: Number, required: true },
-        sceneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Phase' },
+        sceneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scene' },
         teamId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         mediaType: { type: String, required: true },
         fileName: { type: String, required: true },

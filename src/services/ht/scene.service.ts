@@ -10,7 +10,7 @@ async function createScene(data: SceneDocument | object): Promise<SceneDocument>
 }
 
 async function getOneSceneById(id: string): Promise<SceneDocument | null> {
-    return SceneModel.findById(id);
+    return SceneModel.findById(id).populate('tasks');
 
 }
 
