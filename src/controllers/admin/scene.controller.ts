@@ -19,6 +19,22 @@ async function getAllScenes(_: Request, res: Response): Promise<Response> {
     }
 }
 
+async function getAllScenesPopulated(_: Request, res: Response): Promise<Response> {
+    try {
+        const scenes: SceneDocument[] = await SceneService.getAllScenesPopulated();
+
+        if (!scenes.length) {
+            const message: string = 'scenes empty';
+            return resFailed(res, 200, message);
+        }
+
+        const message: string = 'Success get all scenes';
+        return resSuccess(res, 200, message, { scenes });
+    } catch (error: any) {
+        return resFailed(res, 500, error.message);
+    }
+}
+
 async function getSceneById(req: Request, res: Response): Promise<Response> {
     try {
         const { id } = req.params;
@@ -91,4 +107,5 @@ export default {
     createScene,
     updateSceneById,
     deleteSceneById,
+    getAllScenesPopulated,
 };

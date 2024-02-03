@@ -5,6 +5,10 @@ async function getAllScenes(filter: FilterQuery<SceneDocument> = {}): Promise<Sc
     return SceneModel.find(filter);
 }
 
+async function getAllScenesPopulated(filter: FilterQuery<SceneDocument> = {}): Promise<SceneDocument[]> {
+    return SceneModel.find(filter).populate('tasks');
+}
+
 async function createScene(data: SceneDocument | object): Promise<SceneDocument> {
     return await SceneModel.create(data);
 }
@@ -29,4 +33,5 @@ export default {
     getAllScenes,
     getOneSceneById,
     updateOneSceneById,
+    getAllScenesPopulated,
 };

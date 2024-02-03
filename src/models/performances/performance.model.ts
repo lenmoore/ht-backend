@@ -1,22 +1,24 @@
-import { UserDocument } from '../user.model';
 import { SceneDocument } from './scene.model';
 import mongoose from 'mongoose';
 
 export interface PerformanceDocument extends mongoose.Document {
-    refreshToken: string;
-    userId: UserDocument['_id'];
     title: string;
     date: Date;
+    isActive: boolean;
+    startedAt: Date;
+    endedAt: Date;
     description: string;
-    phases: SceneDocument[];
+    scenes: SceneDocument[];
 }
 
 const performanceSchema = new mongoose.Schema({
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         title: { type: String, required: true },
         date: { type: Date, required: true },
+        isaActive: { type: Boolean, default: false },
+        startedAt: { type: Date, required: false },
+        endedAt: { type: Date, required: false },
         description: { type: String, required: true },
-        phases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Phase' }],
+        scenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Phase' }],
     },
     {
         timestamps: true,

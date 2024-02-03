@@ -14,6 +14,8 @@ import userRoutes from './routes/admin/user.route';
 import todoRoutes from './routes/example/todo.route';
 import sceneRoutes from './routes/admin/scene.route';
 import taskRoutes from './routes/admin/task.route';
+import performanceRoutes from './routes/admin/performance.route';
+import actorRoutes from './routes/actor.route';
 
 import auth from './extras/middlewares/auth.middleware';
 import isAdmin from './extras/middlewares/is-admin.middleware';
@@ -71,6 +73,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin/users', auth, isAdmin, userRoutes);
 app.use('/api/admin/scenes', auth, isAdmin, sceneRoutes);
 app.use('/api/admin/tasks', auth, isAdmin, taskRoutes);
+app.use('/api/admin/performances', auth, isAdmin, performanceRoutes);
+app.use('/api/actor', auth, actorRoutes);
 app.use('/api/todos', auth, todoRoutes);
 app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
 app.use((_, res) => resFailed(res, 500, 'Shithouse'));
