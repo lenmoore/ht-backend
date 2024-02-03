@@ -38,8 +38,8 @@ async function getSceneById(req: Request, res: Response): Promise<Response> {
 
 async function createScene(req: Request, res: Response): Promise<Response> {
     try {
-        const { title, description, orderNumber, teams, tasks } = req.body;
-        const data = { title, description, orderNumber, teams, tasks };
+        const { title, description, orderNumber, teams, tasks, groupName } = req.body;
+        const data = { title, description, orderNumber, teams, tasks, groupName };
         const scene: SceneDocument = await SceneService.createScene(data);
 
         const message: string = 'Success create new scene';

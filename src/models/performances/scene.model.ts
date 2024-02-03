@@ -6,6 +6,7 @@ interface SceneInput {
     title: string;
     orderNumber: number;
     description: string;
+    groupName: string;
     tasks: TaskDocument[];
     teams: UserDocument[];
 }
@@ -18,6 +19,7 @@ export interface SceneDocument extends SceneInput, mongoose.Document {
 const phaseSchema = new mongoose.Schema({
         title: { type: String, required: true },
         description: { type: String, required: true },
+        groupName: { type: String, required: true },
         orderNumber: { type: Number, required: true },
         tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
         teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
