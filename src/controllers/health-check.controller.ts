@@ -10,7 +10,7 @@ function healthCheck(_: Request, res: Response): Response {
     };
 
     try {
-        return resSuccess(res, 200, 'Health check success', health);
+        return resSuccess(res, 200, 'Health check success and also GIT!', health);
     } catch (error: any) {
         logger.error(healthCheck.name, error.message);
         return resSuccess(res, 500, error.message);
