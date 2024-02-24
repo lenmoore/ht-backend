@@ -12,7 +12,6 @@ export interface TaskInput {
     teamId: UserDocument['_id'];
     mediaType: string; // 'teleprompter', 'video_silent', 'soundscape'
     fileName: string;
-    // for example if it is 'file123' then the file will be saved as 'YYYY-MM-DD_phasename_teamname_file123.mp4'
     // todo this is not sure actually. idk
 }
 

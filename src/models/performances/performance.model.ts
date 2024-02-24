@@ -18,7 +18,7 @@ const performanceSchema = new mongoose.Schema({
         startedAt: { type: Date, required: false },
         endedAt: { type: Date, required: false },
         description: { type: String, required: true },
-        scenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Phase' }],
+        scenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene' }],
     },
     {
         timestamps: true,

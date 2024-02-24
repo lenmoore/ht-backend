@@ -42,7 +42,7 @@ async function getTaskById(req: Request, res: Response): Promise<Response> {
 async function createTask(req: Request, res: Response): Promise<Response> {
     try {
         const data = req.body;
-        console.log(data);
+        console.log('create task:', data);
         const team = await UserModel.findOne({ email: data.visitorName });
         console.log(team);
         data.teamId = team?._id;

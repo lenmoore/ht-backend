@@ -16,7 +16,7 @@ export interface SceneDocument extends SceneInput, mongoose.Document {
     userId: UserDocument['_id'];
 }
 
-const phaseSchema = new mongoose.Schema({
+const sceneSchema = new mongoose.Schema({
         title: { type: String, required: true },
         description: { type: String, required: true },
         groupName: { type: String, required: true },
@@ -28,5 +28,5 @@ const phaseSchema = new mongoose.Schema({
         timestamps: true,
     });
 
-const SceneModel = mongoose.model<SceneDocument>('Phase', phaseSchema);
+const SceneModel = mongoose.model<SceneDocument>('Scene', sceneSchema);
 export default SceneModel;

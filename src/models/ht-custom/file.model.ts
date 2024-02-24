@@ -16,7 +16,7 @@ export interface FileDocument extends FileInput {
 
 const fileSchema = new mongoose.Schema({
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        sceneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Phase' },
+        sceneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scene' },
         name: { type: String, required: true },
     },
     {
