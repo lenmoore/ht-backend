@@ -1,6 +1,7 @@
 {
   "name": "ht-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "theatre awaits",
   "main": "app.js",
   "scripts": {
