@@ -14,8 +14,7 @@ async function createScene(data: SceneDocument | object): Promise<SceneDocument>
 }
 
 async function getOneSceneById(id: string): Promise<SceneDocument | null> {
-    return SceneModel.findById(id).populate({ path: 'tasks' });
-
+    return SceneModel.findById(id).populate({ path: 'tasks', populate: 'team' });
 }
 
 async function updateOneSceneById(id: string, data: object): Promise<SceneDocument | null> {
