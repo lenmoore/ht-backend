@@ -15,4 +15,5 @@ export const TRUSTED_DOMAINS = [
     'https://localhost',
     'http://localhost80',
     'https://localhost80',
+    'undefined',
 ];

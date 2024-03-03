@@ -65,7 +65,7 @@ const corsConfig = (): CorsOptions => ({
 // app init
 let app = express();
 
-app.use(cors(corsConfig()));
+app.use(cors());
 // app.use(rateLimit(limitConf()));
 app.use(cookieParser());
 app.use(express.json());
@@ -91,7 +91,7 @@ app.listen(PORT, async () => {
 
     await connectToMongo();
 });
-//
+
 // const serverOptions = {
 //     key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
 //     cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
