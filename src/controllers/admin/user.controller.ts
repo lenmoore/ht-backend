@@ -43,7 +43,8 @@ async function getUserById(req: Request, res: Response): Promise<Response> {
 
 async function getUserTasksByName(req: Request, res: Response): Promise<Response> {
     try {
-        const tasks: TaskDocument[] | null = await TaskService.getAllTasks({ teamId: req.params._id });
+        console.log(req.params.name);
+        const tasks: TaskDocument[] | null = await TaskService.getAllTasks({ team: req.params.name });
 
         if (!tasks) {
             const message: string = 'No tasks found';
