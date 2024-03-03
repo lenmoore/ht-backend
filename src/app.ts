@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import * as mongoose from 'mongoose';
 import { logger } from '@typegoose/typegoose/lib/logSettings';
-import { MONGO_URI, TRUSTED_DOMAINS } from '../config/env';
+import { MONGO_URI, PORT, TRUSTED_DOMAINS } from '../config/env';
 
 
 import healthCheckRoutes from './routes/health-check.route';
@@ -85,8 +85,9 @@ app.use('/api/todos', auth, todoRoutes);
 app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
 app.use((_, res) => resFailed(res, 500, 'Shithouse'));
 
-app.listen(80, async () => {
-    console.log('running on port 80');
+logger.info(PORT);
+app.listen(PORT, async () => {
+    console.log('running on port ' + PORT);
 
     await connectToMongo();
 });
