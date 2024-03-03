@@ -3,6 +3,8 @@ import { logger } from '../../logger';
 import { hash, resFailed, resSuccess } from '../../extras/helpers';
 import UserService from '../../services/user.service';
 import { UserDocument } from '../../models/user.model';
+import TaskService from '../../services/ht/task.service';
+import { TaskDocument } from '../../models/ht-custom/task.model';
 
 async function getAllUsers(_: Request, res: Response): Promise<Response> {
     try {
@@ -33,6 +35,23 @@ async function getUserById(req: Request, res: Response): Promise<Response> {
 
         const message: string = 'Success get user by id';
         return resSuccess(res, 200, message, { user });
+    } catch (error: any) {
+        logger.error(getUserById.name, error.message);
+        return resFailed(res, 500, error.message);
+    }
+}
+
+async function getUserTasksByName(req: Request, res: Response): Promise<Response> {
+    try {
+        const tasks: TaskDocument[] | null = await TaskService.getAllTasks({ teamId: req.params._id });
+
+        if (!tasks) {
+            const message: string = 'No tasks found';
+            return resFailed(res, 404, message);
+        }
+
+        const message: string = 'Success get tasks by user name  ' + req.params.name;
+        return resSuccess(res, 200, message, { tasks });
     } catch (error: any) {
         logger.error(getUserById.name, error.message);
         return resFailed(res, 500, error.message);
@@ -105,4 +124,4 @@ async function deleteUserById(req: Request, res: Response): Promise<Response> {
     }
 }
 
-export default { getAllUsers, getUserById, createUser, updateUserById, deleteUserById };
+export default { getAllUsers, getUserById, createUser, updateUserById, deleteUserById, getUserTasksByName };
