@@ -90,7 +90,7 @@ app.listen(80, async () => {
 
     await connectToMongo();
 });
-
+//
 // const serverOptions = {
 //     key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
 //     cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
