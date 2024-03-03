@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { resFailed, resSuccess } from '../../extras/helpers';
 import { SceneDocument } from '../../models/performances/scene.model';
 import SceneService from '../../services/ht/scene.service';
+import moment from 'moment';
+import PerformanceSceneService from '../../services/ht/performance-scene.service';
 
 async function getAllScenes(_: Request, res: Response): Promise<Response> {
     try {
@@ -62,6 +64,37 @@ async function createScene(req: Request, res: Response): Promise<Response> {
         return resSuccess(res, 201, message, { scene });
     } catch (error: any) {
         console.log(error);
+        return resFailed(res, 500, error.message);
+    }
+}
+
+async function startSceneAndAddPerformanceTasks(req: Request, res: Response): Promise<Response> {
+    try {
+        const { id } = req.params;
+        console.log(req.params);
+        const scene: SceneDocument | null = await SceneService.updateOneSceneById(id, { isActive: true });
+
+        if (!scene) {
+            const message: string = 'scene not found';
+            return resFailed(res, 404, message);
+        } else {
+            const sceneTasks = scene.tasks;
+            console.log(sceneTasks);
+            for (const task of sceneTasks) {
+                const sceneStarted = moment.now();
+                const sceneId = scene._id;
+                const performanceId = req.params.performanceId;
+                const actorUserId = req.params.actorUserId;
+                const teamUserId = req.params.teamUserId;
+                const taskId = task._id;
+                const data = { sceneStarted, sceneId, performanceId, actorUserId, teamUserId, taskId };
+                await PerformanceSceneService.createPerformanceScene(data);
+            }
+
+            const message: string = 'Success start scene';
+            return resSuccess(res, 200, message, { scene });
+        }
+    } catch (error: any) {
         return resFailed(res, 500, error.message);
     }
 }

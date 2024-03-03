@@ -17,6 +17,7 @@ router.get('/performance-scenes/', ActorPerformanceController.getAllPerformanceS
 router.post('/performance-scenes/', ActorPerformanceController.createPerformanceScene);
 
 router.put('/performance-scenes/:id', ActorPerformanceController.updatePerformanceSceneById);
+router.put('/performance-scenes/toggle-task/:id', ActorPerformanceController.toggleTask);
 
 router.delete('/performance-scenes/:id', ActorPerformanceController.deletePerformanceSceneById);
 

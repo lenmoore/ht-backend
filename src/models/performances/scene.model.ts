@@ -7,6 +7,7 @@ interface SceneInput {
     orderNumber: number;
     description: string;
     groupName: string;
+    isActive: boolean;
     tasks: TaskDocument[];
     teams: UserDocument[];
 }
@@ -21,6 +22,7 @@ const sceneSchema = new mongoose.Schema({
         description: { type: String, required: true },
         groupName: { type: String, required: true },
         orderNumber: { type: Number, required: true },
+        isActive: { type: Boolean, default: false },
         tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
         teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     },

@@ -47,8 +47,14 @@ async function connectToMongo(): Promise<void> {
 }
 
 const corsConfig = (): CorsOptions => ({
-    origin: TRUSTED_DOMAINS,
-    credentials: true,
+    origin: (origin, callback) => {
+        console.log('CORS Origin:', origin); // Temporary logging
+        if (TRUSTED_DOMAINS.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
 });
 // const limitConf = (): Partial<Options> => ({
 //     windowMs: 15 * 60 * 1000,

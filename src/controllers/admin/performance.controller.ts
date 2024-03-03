@@ -52,8 +52,10 @@ async function updatePerformanceById(req: Request, res: Response): Promise<Respo
     try {
         const { id } = req.params;
         const data = req.body;
+        console.log(data);
         const performance: PerformanceDocument | null = await PerformanceService.updateOnePerformanceById(id, data);
 
+        console.log(performance);
         if (!performance) {
             const message: string = 'performance not found';
             return resFailed(res, 404, message);

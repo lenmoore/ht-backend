@@ -6,7 +6,7 @@ async function getAllScenes(filter: FilterQuery<SceneDocument> = {}): Promise<Sc
 }
 
 async function getAllScenesPopulated(filter: FilterQuery<SceneDocument> = {}): Promise<SceneDocument[]> {
-    return SceneModel.find(filter).populate('tasks');
+    return SceneModel.find(filter).populate({ path: 'tasks', populate: 'team' });
 }
 
 async function createScene(data: SceneDocument | object): Promise<SceneDocument> {
@@ -14,7 +14,7 @@ async function createScene(data: SceneDocument | object): Promise<SceneDocument>
 }
 
 async function getOneSceneById(id: string): Promise<SceneDocument | null> {
-    return SceneModel.findById(id).populate('tasks');
+    return SceneModel.findById(id).populate({ path: 'tasks' });
 
 }
 
@@ -27,6 +27,11 @@ async function deleteOneSceneById(id: string): Promise<SceneDocument | null> {
     return SceneModel.findByIdAndDelete(id);
 }
 
+async function startScene(scene: SceneDocument): Promise<SceneDocument> {
+    scene.isActive = true;
+    return scene.save();
+}
+
 export default {
     createScene,
     deleteOneSceneById,
@@ -34,4 +39,5 @@ export default {
     getOneSceneById,
     updateOneSceneById,
     getAllScenesPopulated,
+    startScene,
 };

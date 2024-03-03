@@ -16,6 +16,7 @@ async function createPerformance(data: PerformanceDocument | object): Promise<Pe
 }
 
 async function updateOnePerformanceById(id: string, data: object): Promise<PerformanceDocument | null> {
+    console.log(data);
     return PerformanceModel.findByIdAndUpdate(id, data, {
         new: true,
     });

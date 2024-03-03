@@ -3,16 +3,19 @@ import { UserDocument } from '../user.model';
 import mongoose from 'mongoose';
 
 export interface TaskInput {
+    orderNumber: number;
     name: string;
     description: string;
-    duration: number; // seconds
-    orderNumber: number;
-    tasks: TaskDocument[];
-    sceneId: SceneDocument['_id'];
-    teamId: UserDocument['_id'];
+
     mediaType: string; // 'teleprompter', 'video_silent', 'soundscape'
+    duration: number; // seconds
+
+    sceneId: SceneDocument['_id'];
+    team: UserDocument['_id'];
+
+    isActive: boolean;
+    isConfirmedByTeam: boolean;
     fileName: string;
-    // todo this is not sure actually. idk
 }
 
 export interface TaskDocument extends TaskInput, mongoose.Document {
@@ -25,7 +28,9 @@ const taskSchema = new mongoose.Schema({
         duration: { type: Number, required: true },
         orderNumber: { type: Number, required: true },
         sceneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Scene' },
-        teamId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        team: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        isActive: { type: Boolean, default: false },
+        isConfirmedByTeam: { type: Boolean, default: false },
         mediaType: { type: String, required: true },
         fileName: { type: String, required: true },
     },

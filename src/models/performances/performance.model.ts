@@ -14,7 +14,7 @@ export interface PerformanceDocument extends mongoose.Document {
 const performanceSchema = new mongoose.Schema({
         title: { type: String, required: true },
         date: { type: Date, required: true },
-        isaActive: { type: Boolean, default: false },
+        isActive: { type: Boolean, default: false },
         startedAt: { type: Date, required: false },
         endedAt: { type: Date, required: false },
         description: { type: String, required: true },

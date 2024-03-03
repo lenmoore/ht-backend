@@ -12,6 +12,7 @@ import SessionService from '../services/session.service';
 import UserService from '../services/user.service';
 import { logger } from '../logger';
 import { UserDocument } from '../models/user.model';
+import PerformanceService from '../services/ht/performance.service';
 
 async function register(req: Request, res: Response): Promise<Response> {
     try {
@@ -68,6 +69,8 @@ async function login(req: Request, res: Response): Promise<Response> {
         const sessionObj = { refreshToken, userId: user._id, expiresAt: date.setDate(date.getDate() + 5) };
         const newSession = await SessionService.createSession(sessionObj);
 
+        const activePerformance = await PerformanceService.getAllPerformances({ isActive: true });
+
         await UserService.updateOneUserById(user._id, { $push: { sessions: newSession } });
 
         const encryptSessionId = generateSessionToken({ sessionId: newSession._id.toString() }, '5d');
@@ -78,7 +81,7 @@ async function login(req: Request, res: Response): Promise<Response> {
         });
 
         const message = 'Login success';
-        return resSuccess(res, 200, message, { accessToken, refreshToken, user });
+        return resSuccess(res, 200, message, { accessToken, refreshToken, user, activePerformance });
     } catch (error: any) {
         logger.error(login.name, error.message);
         return resFailed(res, 500, error.message);
