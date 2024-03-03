@@ -21,9 +21,6 @@ import auth from './extras/middlewares/auth.middleware';
 import isAdmin from './extras/middlewares/is-admin.middleware';
 
 import { resFailed } from './extras/helpers';
-import * as https from 'https';
-import path from 'node:path';
-import * as fs from 'fs';
 
 async function connectToMongo(): Promise<void> {
     console.log('connectToMongoUri', MONGO_URI);
@@ -89,18 +86,18 @@ app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
 app.use((_, res) => resFailed(res, 500, 'Shithouse'));
 
 logger.info(PORT);
-// app.listen(PORT, async () => {
-//     console.log('running on port ' + PORT);
-//
-//     await connectToMongo();
-// });
+app.listen(PORT, async () => {
+    console.log('running on port ' + PORT);
 
-const serverOptions = {
-    key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
-    cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
-};
-
-https.createServer(serverOptions, app).listen(PORT, () => {
-    console.log(`ExpressJS server running on https://localhost:${PORT}`);
-    connectToMongo();
+    await connectToMongo();
 });
+
+// const serverOptions = {
+//     key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
+//     cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
+// };
+//
+// https.createServer(serverOptions, app).listen(PORT, () => {
+//     console.log(`ExpressJS server running on https://localhost:${PORT}`);
+//     connectToMongo();
+// });
