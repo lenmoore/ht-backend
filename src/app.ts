@@ -73,11 +73,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 // app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '500mb', extended: true }));
 app.use('/videod', express.static(path.join(__dirname, '/public/videod')));
 console.log('DIRECTORY= ' + path.join(__dirname, '/public/videod'));
 
-export const jsonMiddleware = express.json({ limit: '50mb' });
+export const jsonMiddleware = express.json({ limit: '500mb' });
 // add routes by module
 app.use('/api', jsonMiddleware, mainRoutes);
 app.use('/api/health-check', jsonMiddleware, healthCheckRoutes);
