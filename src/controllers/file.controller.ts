@@ -7,7 +7,7 @@ import path from 'node:path';
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '/public/videod')); // Change 'public/videod' to your desired storage location
+        cb(null, path.join(__dirname, '../public/videod')); // Change 'public/videod' to your desired storage location
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname); // Use the original file name
