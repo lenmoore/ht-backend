@@ -22,6 +22,9 @@ import auth from './extras/middlewares/auth.middleware';
 import isAdmin from './extras/middlewares/is-admin.middleware';
 
 import { resFailed } from './extras/helpers';
+import * as fs from 'fs';
+import path from 'node:path';
+import * as https from 'https';
 
 async function connectToMongo(): Promise<void> {
     console.log('connectToMongoUri', MONGO_URI);
@@ -73,6 +76,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 // app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use('/videod', express.static(path.join(__dirname, 'public', 'videod')));
 
 export const jsonMiddleware = express.json({ limit: '50mb' });
 // add routes by module
@@ -90,23 +94,22 @@ app.use((_, res) => resFailed(res, 404, 'Path Not Found. Please go to /api'));
 app.use((_, res) => resFailed(res, 500, 'Shithouse'));
 
 // Serve static files
-app.use('/videod', express.static('public/videod'));
 
 
 logger.info(PORT);
 // use this for aws
-app.listen(PORT, async () => {
-    console.log('running on port ' + PORT);
-
-    await connectToMongo();
-});
-
-// const serverOptions = {
-//     key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
-//     cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
-// };
+// app.listen(PORT, async () => {
+//     console.log('running on port ' + PORT);
 //
-// https.createServer(serverOptions, app).listen(PORT, () => {
-//     console.log(`ExpressJS server running on https://localhost:${PORT}`);
-//     connectToMongo();
+//     await connectToMongo();
 // });
+
+const serverOptions = {
+    key: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.key')),
+    cert: fs.readFileSync(path.resolve(__dirname, '../../certificates/server.cert')),
+};
+
+https.createServer(serverOptions, app).listen(PORT, () => {
+    console.log(`ExpressJS server running on https://localhost:${PORT}`);
+    connectToMongo();
+});
