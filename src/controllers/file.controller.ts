@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import multer from 'multer';
 import { TaskDocument } from '../models/ht-custom/task.model';
 import TaskService from '../services/ht/task.service';
+import path from 'node:path';
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/videod'); // Change 'public/videod' to your desired storage location
+        cb(null, path.join(__dirname, '/public/videod')); // Change 'public/videod' to your desired storage location
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname); // Use the original file name
