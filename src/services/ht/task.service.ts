@@ -2,7 +2,7 @@ import { FilterQuery } from 'mongoose';
 import TaskModel, { TaskDocument } from '../../models/ht-custom/task.model';
 
 async function getAllTasks(filter: FilterQuery<TaskDocument> = {}): Promise<TaskDocument[]> {
-    return TaskModel.find(filter);
+    return TaskModel.find(filter).populate('sceneId');
 }
 
 async function createTask(data: TaskDocument | object): Promise<TaskDocument> {

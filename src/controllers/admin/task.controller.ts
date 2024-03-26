@@ -43,7 +43,7 @@ async function createTask(req: Request, res: Response): Promise<Response> {
     try {
         const data = req.body;
         console.log('create task:', data);
-        const team = await UserModel.findOne({ email: data.visitorName });
+        const team = await UserModel.findOne({ name: data.visitorName });
         console.log(team);
         data.team = team?._id;
         const task: TaskDocument = await TaskService.createTask(data);
