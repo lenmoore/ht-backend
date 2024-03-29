@@ -44,7 +44,7 @@ async function uploadVideo(req: any, res: Response) {
             // Add logic here if you want to update something in your database
             return res.status(200).json({
                 mesnpmsage: 'Video uploaded successfully',
-                filePath: `/videod/${req.file.filename}`,
+                filePath: `/videod/${req.file.filename.replace(' ', '_')}`,
             });
         } else {
             return res.status(400).json({ message: 'No video was uploaded' });
