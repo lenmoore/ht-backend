@@ -5,6 +5,20 @@ import { Request, Response } from 'express';
 import SceneService from '../../services/ht/scene.service';
 import UserModel from '../../models/user.model';
 
+async function unconfirmAllTasks(_: Request, res: Response): Promise<Response> {
+    try {
+        const tasks: TaskDocument[] = await TaskService.getAllTasks();
+        for (const task of tasks) {
+            await TaskService.updateOneTaskById(task._id, {
+                isConfirmedByTeam: false,
+            });
+        }
+        const message: string = 'Success unconfirm all tasks';
+        return resSuccess(res, 200, message);
+    } catch (error: any) {
+        return resFailed(res, 500, error.message);
+    }
+}
 
 async function getAllTasks(_: Request, res: Response): Promise<Response> {
     try {
@@ -98,6 +112,7 @@ async function deleteTaskById(req: Request, res: Response): Promise<Response> {
 }
 
 export default {
+    unconfirmAllTasks,
     getAllTasks,
     getTaskById,
     createTask,

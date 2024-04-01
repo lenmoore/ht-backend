@@ -6,6 +6,8 @@ const router: Router = express.Router();
 
 router.get('/', TaskController.getAllTasks);
 
+router.get('/unconfirm-all', TaskController.unconfirmAllTasks);
+
 router.get('/:id', TaskController.getTaskById);
 
 router.post('/', TaskController.createTask);
